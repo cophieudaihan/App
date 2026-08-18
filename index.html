@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+
+    <meta name="theme-color" content="#0f172a">
+
+    <title>Đầu Tư Cổ Tức</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="toast" class="toast"></div>
+
+<header class="header">
+
+    <div>
+        <h1>Đầu Tư Cổ Tức</h1>
+        <p>Quản lý danh mục • giao dịch • cổ tức • dự phóng</p>
+    </div>
+
+</header>
+
+
+<nav class="tabs">
+
+    <button class="tab active" data-tab="dashboard">
+        Tổng quan
+    </button>
+
+    <button class="tab" data-tab="trade">
+        Giao dịch
+    </button>
+
+    <button class="tab" data-tab="dividend">
+        Cổ tức
+    </button>
+
+    <button class="tab" data-tab="projection">
+        Dự phóng
+    </button>
+
+    <button class="tab" data-tab="settings">
+        Cài đặt
+    </button>
+
+</nav>
+
+
+<main>
+
+
+<!-- =================================================
+     DASHBOARD
+================================================= -->
+
+<section id="dashboard" class="tab-panel active">
+
+    <div id="dashboardCards" class="stats"></div>
+
+    <h2>Danh mục</h2>
+
+    <div id="portfolio"></div>
+
+    <h2>Giao dịch gần đây</h2>
+
+    <div id="recent"></div>
+
+</section>
+
+
+<!-- =================================================
+     TRADE
+================================================= -->
+
+<section id="trade" class="tab-panel">
+
+    <div class="card">
+
+        <h2>Thêm giao dịch</h2>
+
+        <form id="tradeForm">
+
+            <div class="grid">
+
+                <label>
+                    Loại giao dịch
+                    <select name="type">
+                        <option value="buy">Mua</option>
+                        <option value="sell">Bán</option>
+                    </select>
+                </label>
+
+                <label>
+                    Ngày
+                    <input
+                        type="date"
+                        name="date"
+                        required>
+                </label>
+
+                <label>
+                    Mã cổ phiếu
+                    <input
+                        type="text"
+                        name="symbol"
+                        placeholder="ADP"
+                        required>
+                </label>
+
+                <label>
+                    Số lượng
+                    <input
+                        type="number"
+                        name="qty"
+                        min="1"
+                        step="1"
+                        required>
+                </label>
+
+                <label>
+                    Giá
+                    <input
+                        type="number"
+                        name="price"
+                        min="0"
+                        step="0.01"
+                        required>
+                </label>
+
+                <label>
+                    Nguồn tiền
+                    <select name="source">
+                        <option value="cash">
+                            Tiền mặt
+                        </option>
+
+                        <option value="dividend">
+                            Ví cổ tức
+                        </option>
+                    </select>
+                </label>
+
+            </div>
+
+            <label>
+                Ghi chú
+                <textarea name="note"></textarea>
+            </label>
+
+            <button class="primary">
+                Lưu giao dịch
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>Nạp tiền</h2>
+
+        <form id="depositForm">
+
+            <div class="grid">
+
+                <label>
+                    Số tiền
+                    <input
+                        type="number"
+                        name="amount"
+                        min="1"
+                        required>
+                </label>
+
+                <label>
+                    Ngày
+                    <input
+                        type="date"
+                        name="date"
+                        required>
+                </label>
+
+            </div>
+
+            <label>
+                Ghi chú
+                <textarea name="note"></textarea>
+            </label>
+
+            <button class="primary">
+                Nạp tiền
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>Lịch sử giao dịch</h2>
+
+        <div id="transactions"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================================
+     DIVIDEND
+================================================= -->
+
+<section id="dividend" class="tab-panel">
+
+    <div class="card">
+
+        <h2>Thêm quyền cổ tức</h2>
+
+        <form id="dividendForm">
+
+            <div class="grid">
+
+                <label>
+                    Mã cổ phiếu
+                    <input
+                        type="text"
+                        name="symbol"
+                        placeholder="ADP"
+                        required>
+                </label>
+
+                <label>
+                    Loại
+                    <select name="type">
+
+                        <option value="cash">
+                            Cổ tức tiền mặt
+                        </option>
+
+                        <option value="stock">
+                            Cổ tức cổ phiếu
+                        </option>
+
+                        <option value="bonus">
+                            Cổ phiếu thưởng
+                        </option>
+
+                    </select>
+                </label>
+
+                <label>
+                    Ngày chốt quyền
+                    <input
+                        type="date"
+                        name="recordDate"
+                        required>
+                </label>
+
+                <label>
+                    Ngày nhận
+                    <input
+                        type="date"
+                        name="payDate"
+                        required>
+                </label>
+
+            </div>
+
+
+            <div id="cashDividendFields">
+
+                <label>
+                    Cổ tức tiền / CP
+                    <input
+                        type="number"
+                        name="cashPerShare"
+                        min="0"
+                        step="0.01"
+                        value="0">
+                </label>
+
+            </div>
+
+
+            <div id="stockDividendFields">
+
+                <div class="grid">
+
+                    <label>
+                        Tỷ lệ CP hiện có
+                        <input
+                            type="number"
+                            name="ratioBase"
+                            value="10"
+                            min="1">
+                    </label>
+
+                    <label>
+                        Tỷ lệ CP nhận
+                        <input
+                            type="number"
+                            name="ratioNew"
+                            value="1"
+                            min="0"
+                            step="1">
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <label>
+                Ghi chú
+                <textarea name="note"></textarea>
+            </label>
+
+            <button class="primary">
+                Lưu cổ tức
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>Lịch sử cổ tức</h2>
+
+        <div id="dividends"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================================
+     PROJECTION
+================================================= -->
+
+<section id="projection" class="tab-panel">
+
+    <div class="card projection-form">
+
+        <h2>Dự phóng đầu tư cổ tức</h2>
+
+        <p class="hint">
+            Dự phóng độc lập, không ảnh hưởng danh mục thật.
+        </p>
+
+        <form id="projectionForm">
+
+            <div class="grid">
+
+                <label>
+                    Mã cổ phiếu nguồn
+                    <input
+                        id="projectionSource"
+                        placeholder="ADP">
+                </label>
+
+                <label>
+                    Mã cổ phiếu tái đầu tư
+                    <input
+                        id="projectionTarget"
+                        placeholder="SJD">
+                </label>
+
+                <label>
+                    CP nguồn ban đầu
+                    <input
+                        id="projectionShares"
+                        type="number"
+                        min="0"
+                        value="0">
+                </label>
+
+                <label>
+                    Giá CP năm đầu
+                    <input
+                        id="projectionPrice"
+                        type="number"
+                        min="0"
+                        value="23000">
+                </label>
+
+                <label>
+                    Tiền nạp thêm / tháng
+                    <input
+                        id="projectionMonthlyMoney"
+                        type="number"
+                        min="0"
+                        value="30000000">
+                </label>
+
+                <label>
+                    % tiền dùng tái đầu tư
+                    <input
+                        id="projectionReinvest"
+                        type="number"
+                        min="0"
+                        max="100"
+                        value="100">
+                </label>
+
+                <label>
+                    Lãi tiền mặt / năm
+                    <input
+                        id="projectionCashInterest"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value="4">
+                </label>
+
+                <label>
+                    Số năm đầu tư
+                    <input
+                        id="projectionYears"
+                        type="number"
+                        min="1"
+                        value="10">
+                </label>
+
+            </div>
+
+
+            <h3>Thời gian</h3>
+
+            <div class="grid">
+
+                <label>
+                    Bắt đầu đầu tư
+                    <input
+                        id="projectionStartDate"
+                        type="date">
+                </label>
+
+                <label>
+                    Thời gian nạp thêm
+                    <input
+                        id="projectionContributionYears"
+                        type="number"
+                        min="0"
+                        value="2">
+                </label>
+
+                <label>
+                    Thời gian tái đầu tư
+                    <input
+                        id="projectionReinvestYears"
+                        type="number"
+                        min="0"
+                        value="10">
+                </label>
+
+                <label>
+                    Thời gian nắm giữ
+                    <input
+                        id="projectionHoldingYears"
+                        type="number"
+                        min="1"
+                        value="10">
+                </label>
+
+            </div>
+
+
+            <h3>Tăng trưởng</h3>
+
+            <div class="grid">
+
+                <label>
+                    Tăng trưởng cổ tức / năm
+                    <input
+                        id="projectionDividendGrowth"
+                        type="number"
+                        step="0.1"
+                        value="3">
+                </label>
+
+                <label>
+                    Tăng trưởng giá / năm
+                    <input
+                        id="projectionPriceGrowth"
+                        type="number"
+                        step="0.1"
+                        value="3">
+                </label>
+
+            </div>
+
+
+            <h3>3 kịch bản cổ tức</h3>
+
+            <div class="scenario-inputs">
+
+                <label>
+                    🔴 Yếu
+                    <input
+                        id="scenarioWeak"
+                        type="number"
+                        value="2000">
+                </label>
+
+                <label>
+                    🟡 Trung bình
+                    <input
+                        id="scenarioMedium"
+                        type="number"
+                        value="3000">
+                </label>
+
+                <label>
+                    🟢 Cao
+                    <input
+                        id="scenarioHigh"
+                        type="number"
+                        value="4000">
+                </label>
+
+            </div>
+
+
+            <button class="primary">
+                Chạy dự phóng
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>Tổng quan dự phóng</h2>
+
+        <div
+            id="projectionSummary"
+            class="projection-summary">
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>So sánh 3 kịch bản</h2>
+
+        <div
+            id="projectionScenarioSummary"
+            class="scenario-results">
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>Chi tiết từng năm</h2>
+
+        <div
+            id="projectionTable"
+            class="table-scroll">
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================================
+     SETTINGS
+================================================= -->
+
+<section id="settings" class="tab-panel">
+
+    <div class="card">
+
+        <h2>Cài đặt</h2>
+
+        <form id="settingsForm">
+
+            <div class="grid">
+
+                <label>
+                    Phí giao dịch (%)
+                    <input
+                        name="fee"
+                        type="number"
+                        step="0.01">
+                </label>
+
+                <label>
+                    Phí lưu ký / CP / ngày
+                    <input
+                        name="custody"
+                        type="number"
+                        step="0.001">
+                </label>
+
+                <label>
+                    Lãi tiền mặt (%/năm)
+                    <input
+                        name="interest"
+                        type="number"
+                        step="0.01">
+                </label>
+
+            </div>
+
+
+            <label class="checkbox">
+
+                <input
+                    type="checkbox"
+                    name="custodyEnabled">
+
+                Tính phí lưu ký
+
+            </label>
+
+
+            <button class="primary">
+                Lưu cài đặt
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>Backup / Restore</h2>
+
+        <button
+            class="secondary"
+            onclick="backupJSON()">
+
+            Xuất Backup
+
+        </button>
+
+
+        <label class="file-button">
+
+            Khôi phục Backup
+
+            <input
+                id="restoreInput"
+                type="file"
+                accept=".json">
+
+        </label>
+
+    </div>
+
+
+    <div class="card danger-card">
+
+        <h2>Xóa dữ liệu</h2>
+
+        <button
+            class="danger"
+            onclick="resetAll()">
+
+            Xóa toàn bộ dữ liệu
+
+        </button>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>
